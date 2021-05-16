@@ -13,9 +13,7 @@ namespace TelephoneAgain
 {
     public partial class Phone : Form
     {
-        
 
-        
         SqlConnection con = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\irem\Desktop\C#\List\TelephoneAgain\Logs.mdf;Integrated Security=True");
         
         
@@ -31,6 +29,9 @@ namespace TelephoneAgain
             textBox6.ForeColor = Color.Silver;
             textBox7.Text = "Enter Date: YYYY-MM-DD";
             textBox7.ForeColor = Color.Silver;
+
+            AlertDate();
+
             Display();
         }
 
@@ -63,7 +64,24 @@ namespace TelephoneAgain
             con.Close();
             MessageBox.Show("Your information has been uploaded...!");
 
+
             Display();
+        }
+
+        void AlertDate()
+        {
+            SqlDataAdapter sda = new SqlDataAdapter("Select * from Logs", con);
+            DataTable dts = new DataTable();
+            sda.Fill(dts);
+
+            string alertDate = '#' + System.DateTime.Now.ToString("MM/dd/yyyy") + '#';
+
+            DataRow[] alertresult = dts.Select("[End Date:] = " + alertDate);
+            foreach (DataRow row in alertresult)
+            {
+                //Here you will get each row record. So you can show alert box as per your requirement  
+                MessageBox.Show("The following certificates need updating: " + row[0].ToString());  
+            }
         }
 
         //populate cells in window view
@@ -72,6 +90,8 @@ namespace TelephoneAgain
             SqlDataAdapter sda = new SqlDataAdapter("Select * from Logs Order By [End Date:] Asc", con);
             DataTable dt = new DataTable();
             sda.Fill(dt);
+
+
 
             dataGridView1.Rows.Clear();
 
