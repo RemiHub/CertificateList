@@ -40,6 +40,8 @@ namespace TelephoneAgain
             ClearAll();
             comboBox1.SelectedIndex = -1;
             textBox1.Focus();
+
+            AlertDate();
         }
 
         //clear fields
@@ -76,12 +78,22 @@ namespace TelephoneAgain
 
             string alertDate = '#' + System.DateTime.Now.ToString("MM/dd/yyyy") + '#';
 
-            DataRow[] alertresult = dts.Select("[End Date:] = " + alertDate);
+            DataRow[] alertresult = dts.Select("[End Date:] <= " + alertDate);
+
+            
+
             foreach (DataRow row in alertresult)
             {
-                //Here you will get each row record. So you can show alert box as per your requirement  
-                MessageBox.Show("The following certificates need updating: " + row[0].ToString());  
+
+                //title of warning/message box
+                string title = "Warning!";
+
+                //row record  
+                MessageBox.Show("The following certificates need updating: " + row[0].ToString(), title);  
             }
+
+           
+
         }
 
         //populate cells in window view
